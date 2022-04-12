@@ -43,6 +43,8 @@ def GuessFunction():           #Function for guessing
         else:
             print("Hangman is getting closer to death....\n\n\n")   # if missed, print this
             Counter = Counter + 1       # death counter +1
+            ChancesLeft = 6 - Counter
+            print("You have " + str(ChancesLeft) + " tries left.")      #Tell how many chances left 
             if Counter == 6:            # if death counter = 6, end the game
                 Functions.HangmanGraphic(Counter)
                 print("You killed him...")
