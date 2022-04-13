@@ -5,13 +5,14 @@ def GuessFunction():           #Function for guessing
     global Counter
     global UsedWords
     global Wordlist
+    global ChancesLeft
 
     Input = True
     while Input == True:        #start loop
         guess = input("What letter? : ")  # ask for a letter
         Guess = guess.upper()             # make it all capital letters
         if UsedWords.count(Guess) > 0:    # check if it was used already
-            print("You used this word!")  # print this when used, then go loop
+            print("You have used this word!")  # print this when used, then go loop
             continue
         elif len(Guess) > 1:                    #if entered more than
             print("please enter 1 letter")      #loop if it is
@@ -26,7 +27,7 @@ def GuessFunction():           #Function for guessing
 
         UsedWords.append(Guess)                 # add it to used list
         if Wordlist.count(Guess) > 0:           # is its right
-            print("You got it!\n\n\n")          
+            print("You got it!\n\n\n")
 
             for p in [p for p, x in enumerate(Wordlist) if x == Guess]:             # These 3 lines replace the underscore
                 Displaylist.pop(p)
@@ -43,8 +44,9 @@ def GuessFunction():           #Function for guessing
         else:
             print("Hangman is getting closer to death....\n\n\n")   # if missed, print this
             Counter = Counter + 1       # death counter +1
-            ChancesLeft = 6 - Counter
-            print("You have " + str(ChancesLeft) + " tries left.")      #Tell how many chances left 
+            ChancesLeft = ChancesLeft - 1
+            WrongWords.append(Guess)
+            print("You have " + str(ChancesLeft) + " tries left.")      #Tell how many chances left
             if Counter == 6:            # if death counter = 6, end the game
                 Functions.HangmanGraphic(Counter)
                 print("You killed him...")
@@ -67,12 +69,14 @@ def DisplayFunction():          # ______ stuff
 import Functions
 global Displaylist
 Counter = 0
+ChancesLeft = 6
 f = open("Hangman.txt", "r")
 HangmanWord = (f.read()).upper()
 f.close()
 # make the letter into a list
 Wordlist = list(HangmanWord)
-UsedWords = []
+UsedWords = []          #usedword list
+WrongWords = []         #wrongword list
 #print underlines
 Display = ""
 
@@ -91,11 +95,10 @@ Game = True
 while Game == True:                 # main code running here
     Functions.HangmanGraphic(Counter)
     print("    [    " + Display + "    ]") # display it a bit cooler
-    print("You've used: " + str(UsedWords))
+    print("Wrong guesses: " + str(WrongWords))
+    print("You have "+str(ChancesLeft)+" lives left")
     GuessFunction()
     DisplayFunction()
-
-
 
 
 
